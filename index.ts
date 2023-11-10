@@ -20,7 +20,7 @@ Bun.serve({
         const url = new URL(request.url);
         if (url.pathname === "/") return new Response(Bun.file("index.html"));
         if (url.pathname === "/booster") {
-            const cards = await fetchBoosterPack();
+            const cards = await fetchBoosterPack(false);
             const html = (cards.filter(c => c) as GameCard[])
                 .map((c, i) => buildCardHTML(c, i))
                 .reduce((acc, cur) => `${acc}${cur}`, "");
