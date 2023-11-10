@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/htmx.org@1.9.8/dist/htmx.min.js"></script>
+    <title>Wiki TCG</title>
+</head>
+<body>
+<div id="ind"></div>
+<form hx-boost hx-get="/collect" hx-target="#cards" hx-indicator="#ind">
+    <input name="title" type="text" id="title">
+    <button type="submit">Collect</button>
+</form>
+<button hx-trigger="click" hx-get="./booster" hx-target="#cards" hx-swap="innerHTML">Open Booster Pack</button>
+<div id="cards"></div>
+</body>
+<style>
+    body {
+        overflow: hidden;
+
+        width: 100vw;
+        height: 100vh;
+
+        padding: 0;
+        margin: 0;
+    }
+
+    #cards {
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        flex-wrap: wrap;
+
+        gap: 1em;
+
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+
+        padding: 2em;
+
+        box-sizing: border-box;
+    }
+
+    .card {
+        position: relative;
+
+        font-family: sans-serif;
+
+        --ht: 1;
+
+        display: flex;
+        flex-flow: column;
+        align-items: stretch;
+
+        min-width: 22em;
+        max-width: 22em;
+
+        aspect-ratio: .65;
+
+        overflow: hidden;
+
+        background-color: #f8f9fa;
+        border: 6px solid var(--bg);
+        border-radius: .15em;
+
+        padding: .5em;
+
+        box-shadow: 0 0 calc(var(--ht) * 1px) #333333, 0 0 calc(var(--ht) * var(--ht) * 3px) #cccccc81, 0 0 calc(var(--ht) * var(--ht) * 4px) #cccccc11;
+
+        opacity: 0;
+
+        z-index: 3;
+        animation: slide-in .3s ease-out;
+        animation-delay: calc(.3s * var(--i));
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(-100vw);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .card.rarity-0 {
+        --bg: #f8f9fa
+    }
+
+    .card.rarity-1 {
+        --bg: #94b2ef
+    }
+
+    .card.rarity-2 {
+        --bg: #3366cc
+    }
+
+    .card.rarity-2 .card-heading {
+        color: white
+    }
+
+    .card.rarity-3 {
+        --bg: #6b33cc
+    }
+
+    .card.rarity-3 .card-heading {
+        color: white
+    }
+
+    .card.rarity-4 {
+        --bg: #ffac30
+    }
+
+    .card:is(.rarity-5, .rarity-4, .rarity-3) .card-heading::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 .5em -100%;
+
+        width: 200%;
+
+        opacity: .3;
+
+        background: radial-gradient(
+                circle at 50% 50%,
+                white 50%,
+                transparent 51%
+        ) 0 0 repeat;
+        background-size: .4em .4em;
+        animation: n 10s linear infinite;
+    }
+
+    .card.rarity-4 .card-heading::after {
+        content: "";
+        position: absolute;
+        inset: 0 0 1.5em -100%;
+
+        width: 200%;
+
+        opacity: .3;
+
+        background: radial-gradient(
+                circle at 50% 50%,
+                white 50%,
+                transparent 51%
+        ) 0 0 repeat;
+        background-size: .4em .4em;
+        animation: n 10s linear infinite reverse;
+    }
+
+    .card.rarity-5::after {
+        content: "";
+        position: absolute;
+        inset: 0 0 0 -100%;
+
+        background-position: 50% 50%;
+        background-size: 300% 300%;
+        background-image: linear-gradient(
+                115deg,
+                transparent 0%,
+                #ff00c3 25%,
+                transparent 47%,
+                transparent 53%,
+                var(--bg) 75%,
+                transparent 100%
+        );
+        opacity: .5;
+        filter: brightness(.5) contrast(1);
+        z-index: 2;
+
+        animation: n 3s ease-in-out infinite alternate;
+    }
+
+
+    @keyframes n {
+        from {
+            transform: translateX(0px);
+        }
+        to {
+            transform: translateX(50%);
+        }
+    }
+
+    .card.rarity-5 {
+        --bg: #b7950f
+    }
+
+    .card:hover {
+        --ht: 4;
+    }
+
+    .card-image {
+        min-width: 19em;
+        min-height: 19em;
+
+        border-radius: .2em;
+
+        align-self: center;
+
+        background-color: #e0e0f6;
+
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: 20% 50%;
+
+        border: 6px solid white;
+
+        margin: 1em 0;
+
+        z-index: 2;
+    }
+
+    .card-flavor {
+        flex: 1;
+    }
+
+    .card p, .card h3 {
+        margin: 0;
+    }
+
+    .card-heading {
+        position: relative;
+
+        min-height: 3em;
+        max-height: 3em;
+
+        display: flex;
+        flex-flow: column;
+        justify-content: space-between;
+
+        margin: -1em;
+        padding: 2em;
+
+        background-color: var(--bg);
+        box-shadow: 0 2em 0 var(--bg), 0 0 2em var(--bg);
+    }
+
+    .card-heading * {
+        z-index: 3;
+    }
+
+    .card-heading h3 {
+        max-width: 100%;
+
+        overflow: hidden;
+
+        font-weight: bolder;
+        font-size: calc(1.8em * (min(18, var(--len)) / var(--len)));
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .card-heading p {
+        font-size: .8em;
+        text-transform: capitalize;
+    }
+
+    .card-flavor {
+        font-size: .95em;
+        font-style: italic;
+    }
+
+    .card-desc {
+        font-size: .6em;
+        font-weight: bold;
+        text-align: right;
+
+        z-index: 3;
+    }
+
+    #ind {
+        position: absolute;
+        inset: 0 0 0 0;
+
+        display: none;
+
+        background-color: black;
+    }
+
+    #ind::after {
+        content: "";
+        position: absolute;
+        inset: 0 0 0 -100%;
+
+        background-position: 50% 50%;
+        background-size: 300% 300%;
+        background-image: linear-gradient(
+                115deg,
+                transparent 0%,
+                white 25%,
+                transparent 47%,
+                transparent 53%,
+                white 75%,
+                transparent 100%
+        );
+        opacity: .5;
+        filter: brightness(.5) contrast(1);
+        z-index: 2;
+
+        animation: n 3s ease-in-out infinite alternate;
+    }
+
+    #ind.htmx-request {
+        display: block;
+    }
+</style>
+</html>
