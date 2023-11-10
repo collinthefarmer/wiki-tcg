@@ -12,7 +12,7 @@
     <input name="title" type="text" id="title">
     <button type="submit">Collect</button>
 </form>
-<button hx-trigger="click" hx-get="./booster" hx-target="#cards" hx-swap="innerHTML">Open Booster Pack</button>
+<button hx-indicator="#ind" hx-trigger="click" hx-get="./booster" hx-target="#cards" hx-swap="innerHTML">Open Booster Pack</button>
 <div id="cards"></div>
 </body>
 <style>
