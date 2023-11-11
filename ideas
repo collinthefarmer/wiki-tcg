@@ -1,2 +1,100 @@
 - rarity based off of page views? or content-to-view ratio?
+    - rarity informs quality of AI output
+        - weaker, more common cards get summarized with an angry or belittling tone
+        - would also get less nice NOUNs and ADJECTIVES
 - give credit to most contributing editor
+- cards have a "vintage" based on the revision they were generated in
+    - store cards with a vintage key to still allow for caching
+
+
+- build out a set of different card frames to handle common thumbnail aspect ratios
+    - and map cards to frames based on the AR of their thumbnails
+
+
+- NOUNs and ADJECTIVES:
+    - impact card visuals
+    - noun -> card shape/outline texture
+    - adjs -> card interior texture
+
+
+- RARITY
+    - interact with noun/adjective patterns
+
+
+- GAMEPLAY:
+    - fundamentally it's War
+    - players take turns laying down cards
+    - highest view count/edit count?/content length? wins
+
+
+
+
+idea requirements
+    - map all nouns/adjectives to display patterns
+
+    - API to access page metadata
+        - most contributing editor
+        - page views
+        - content length
+        - number of related pages?
+
+
+
+PLAN
+
+Adjust Backend
+
+- nginx reverse proxy/load balancing
+
+Adjust APIs
+
+- clean up and secure backend
+- error handling, logging
+
+Build New APIs
+
+- deck storage
+    - store to local file
+    - load using site
+
+Front End
+
+- rebuild card layout
+    - multiple layouts for thumbnail variants
+- allow for noun/adj patterns
+- rarity effects
+
+
+
+-- CONCEPT
+
+CARDS
+cards' subjects are chosen randomly from all english wikipedia articles
+cards are uniquely identified by their canonical title and revision number
+cards have:
+    a power level determined by the page views/edit count of their source article
+    card art from thumbnail
+    AI generated flavor text or quote about them from (a made-up character's) perspective
+    AI selected classification constructed from choices of noun/adjective sets
+    card decoration determined by noun/adjective choices
+cards are generated only once per title/revision
+
+GAMEPLAY
+users each draw 1 hand of 7 cards
+users take turns laying down cards until all players have
+highest value card laid wins, winner takes pot
+start new hand
+after n hands, or only one player has cards, game is over
+users can opt to save their decks to a local file
+
+
+-- IMPLEMENTATION
+
+FRONT-END
+
+STYLING
+
+
+
+
+
