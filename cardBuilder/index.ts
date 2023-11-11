@@ -12,14 +12,13 @@ export type CardGenerationConfiguration = {
 }
 
 export async function buildCardFromSeed(seed: CardSeed, configuration: CardGenerationConfiguration): Promise<Card> {
+    const count = await fetchCount(seed);
     const [
         flavor,
-        classification,
-        count
+        classification
     ] = await Promise.all([
-        fetchFlavor(seed, configuration.flavor),
-        fetchClassification(seed, configuration.classification),
-        fetchCount(seed)
+        fetchFlavor(seed, count, configuration.flavor),
+        fetchClassification(seed, count, configuration.classification)
     ]);
     return Object.assign(seed, flavor, classification, count);
 }

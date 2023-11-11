@@ -1,5 +1,6 @@
 import { generateText } from "./openai.ts";
 import { CardSeed } from "../article";
+import { CountPayload } from "./count.ts";
 
 const flavorTypePromptMap: Record<string, string[]> = {
     "poeticDescription": ["Generate a short, yet poetic, description of the subject of the text input under 240 characters."]
@@ -15,7 +16,7 @@ export type FlavorConfiguration = {
     forcedTextType?: string;
 }
 
-export async function fetchFlavor<T>(base: CardSeed, configuration: FlavorConfiguration): Promise<FlavorPayload<T>> {
+export async function fetchFlavor<T>(base: CardSeed, count: CountPayload, configuration: FlavorConfiguration): Promise<FlavorPayload<T>> {
     const type = configuration.forcedTextType ?? await determineFlavorTextType(base);
     const [flavorText, flavorContext] = await Promise.all([
         await generateFlavorText(type, base),

@@ -1,5 +1,6 @@
 import { CardSeed } from "../article";
 import { generateText } from "./openai.ts";
+import { CountPayload } from "./count.ts";
 
 
 export type ClassificationPayload = {
@@ -10,7 +11,7 @@ export type ClassificationPayload = {
 
 export type ClassificationConfiguration = { nouns: string[], adjectives: string[] };
 
-export async function fetchClassification(base: CardSeed, configuration: ClassificationConfiguration): Promise<ClassificationPayload> {
+export async function fetchClassification(base: CardSeed, count: CountPayload, configuration: ClassificationConfiguration): Promise<ClassificationPayload> {
     const [
         noun,
         adjective
